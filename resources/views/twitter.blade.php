@@ -32,6 +32,30 @@
 </nav>
 
      <div class="container">
+       <form class="well" action="{{route('post.tweet')}}" method="POST" enctype="multipart/form-data">
+         {{csrf_field()}}
+         @if(count($errors->all()) > 0)
+           @foreach($errors as $error)
+              <div class="alert alert-danger">
+                {{$error}}
+              </div>
+           @endforeach
+         @endif
+         <div class="form-group">
+           <label for="tweet">Tweet Text</label>
+           <input type="text" class="form-control" id="tweet" name="tweet" placeholder="">
+           <p class="help-block">Help text here.</p>
+         </div>
+         <div class="form-group">
+           <label for="images">Upload image</label>
+           <input type="file" name="images[]" multiple class="form-control-file">
+           <small class="text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
+         </div>
+         <div class="form-group">
+         <button type="submit" class="btn btn-success">Create Tweet</button>
+         </div>
+
+       </form>
        @if(!empty($data))
           @foreach($data as $key => $tweet)
                 <div class="well">
@@ -40,8 +64,8 @@
                       <i class="glyphicon glyphicon-repeat"></i> {{$tweet['retweet_count']}}
                     </h3>
                     @if(!empty($tweet['extended_entities']['media']))
-                      @foreach($tweet['extended_entities']['media'] as $image)
-                          <img src="$image['media_url_https']" alt="" width="100">
+                      @foreach($tweet['extended_entities']['media'] as $i)
+                        <img src="{{$i['media_url_https']}}" style="width:100px;">
                       @endforeach
                     @endif
                 </div>
